@@ -1,5 +1,6 @@
 package com.les.chat
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         val password = password_edittext_login.text.toString()
         }
         already_have_account_text_view.setOnClickListener{
-            intent
+            val intent = Intent(this,LoginActivity::class.java)
+            startActivity(intent)
         }
 
     }
