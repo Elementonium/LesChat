@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         register_button_register.setOnClickListener {
         val email = email_edittext_register.text.toString()
-        val password = password_edittext_login.text.toString()
+        val password = password_androidstudio_register.text.toString()
         }
         already_have_account_text_view.setOnClickListener{
             val intent = Intent(this,LoginActivity::class.java)
