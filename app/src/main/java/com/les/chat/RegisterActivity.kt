@@ -3,6 +3,7 @@ package com.les.chat
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -34,7 +35,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 
-    var selectedPhotoUri: Uri? = null //create  a varible of type uri,optional, initially null
+    var selectedPhotoUri: Uri? =  null //create  a varible of type uri,optional, initially null
 
     //called when selectphoto_button_register activity is completed
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
