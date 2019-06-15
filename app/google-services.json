@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "787312003919",
+    "firebase_url": "https://leschat-d479d.firebaseio.com",
+    "project_id": "leschat-d479d",
+    "storage_bucket": "leschat-d479d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787312003919:android:767cc20a838ec400",
+        "android_client_info": {
+          "package_name": "com.les.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787312003919-glhdilcj7gug3ekdpp6bb3akbam5e21u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1VXXU-y4SwrZ8YEVgrZ86CJ_Aofjfw6w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787312003919-glhdilcj7gug3ekdpp6bb3akbam5e21u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
