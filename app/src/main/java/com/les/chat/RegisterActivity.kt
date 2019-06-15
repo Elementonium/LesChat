@@ -3,20 +3,22 @@ package com.les.chat
 import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_register)
 
         register_button_register.setOnClickListener {
             performRegister()
@@ -43,9 +45,11 @@ class RegisterActivity : AppCompatActivity() {
         if(requestCode==0 && resultCode == Activity.RESULT_OK && data != null){
             selectedPhotoUri = data.data
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
-            val drawable = BitmapDrawable(bitmap)
+            selectphoto_imageview_register.setImageBitmap(bitmap)
+            selectphoto_button_register.alpha = 0f
 
-            selectphoto_button_register.setBackgroundDrawable(drawable)
+            //val drawable = BitmapDrawable(bitmap)
+            //selectphoto_button_register.setBackgroundDrawable(drawable)
 
         }
     }
@@ -74,8 +78,33 @@ class RegisterActivity : AppCompatActivity() {
 
         val filename = UUID.randomUUID().toString() //generate random filename
         val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+        //!! = uri is not null (avoid type mismatch uri?)
+        ref.putFile(selectedPhotoUri!!)
+            .addOnSuccessListener {
 
-        ref.putFile(selectedPhotoUri!!) //!! = uri is not null (avoid type mismatch uri?
+                ref.downloadUrl.addOnSuccessListener {
+                    saveUserToFirebaseDatabase(it.toString())
+                }
+            }
+            .addOnFailureListener{
+
+            }
+
+    }
+
+    private fun saveUserToFirebaseDatabase(displayPictureUrl: String){
+        val uid = FirebaseAuth.getInstance().uid ?: "" //if uid is null default to empty string
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+
+        val user = User(uid, username_edittext_register.text.toString(), displayPictureUrl)
+        ref.setValue(user)
+            .addOnSuccessListener {
+                Toast.makeText(this , "Created user" , Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this , "Failed to create user: ${it.message.toString()}" , Toast.LENGTH_SHORT).show()
+            }
     }
 
 }
+class User(val uid: String, val username: String, val displayPictureUrl: String)
