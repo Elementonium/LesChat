@@ -100,6 +100,9 @@ class RegisterActivity : AppCompatActivity() {
         ref.setValue(user)
             .addOnSuccessListener {
                 Toast.makeText(this , "Created user" , Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Conversations::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
             .addOnFailureListener {
                 Toast.makeText(this , "Failed to create user: ${it.message.toString()}" , Toast.LENGTH_SHORT).show()
@@ -107,4 +110,6 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 }
-class User(val uid: String, val username: String, val displayPictureUrl: String)
+class User(val uid: String, val username: String, val displayPictureUrl: String){
+    constructor() : this("","","")
+}
