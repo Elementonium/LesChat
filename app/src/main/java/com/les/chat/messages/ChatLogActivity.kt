@@ -10,6 +10,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.les.chat.R
 import com.les.chat.models.ChatMessage
 import com.les.chat.models.User
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
@@ -21,32 +22,40 @@ import kotlinx.android.synthetic.main.chat_sent_row.view.*
 class ChatLogActivity : AppCompatActivity() {
 
     val adapter= GroupAdapter<ViewHolder>()
+    var partnerUser: User ?= null //intialize chat partner, optional, with null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
         recyclerview_chatlog.adapter=adapter
-        val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
 
+        //set the chat partner to the user recieved from NewMessageActivity
+        partnerUser = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
 
-        supportActionBar?.title = user.username
-        //dummyData()
+        supportActionBar?.title = partnerUser?.username
+
         listenForMessages()
+
         send_button_chatlog.setOnClickListener {
             performSendMessage()
         }
     }
     private fun listenForMessages(){
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = partnerUser?.uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
+        //when a new child is added to given node
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                val chatMessage = p0.getValue(ChatMessage::class.java)
+                val chatMessage = p0.getValue(ChatMessage::class.java) //store the chat message as a ChatMessage
                 if (chatMessage != null) {
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        adapter.add(ChatSentItem(chatMessage.text))
+                        val currentUser = Conversations.currentUser ?: return //get current usr from global var in ConversationsActivity
+                        adapter.add(ChatSentItem(chatMessage.text, currentUser)) //add sentitem to the chatlog
                     } else {
-                        adapter.add(ChatRecievedItem(chatMessage.text))
+                        adapter.add(ChatRecievedItem(chatMessage.text, partnerUser!!)) //add recieveditem to the chatlog
+                        recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)
                     }
                 }
             }
@@ -68,31 +77,35 @@ class ChatLogActivity : AppCompatActivity() {
         })
     }
     private fun performSendMessage(){
-        val ref = FirebaseDatabase.getInstance().getReference("/messages").push() //push creates a new child in ref
+        //Set the properties of ChatMessage
         val text = message_edittext_chatlog.text.toString()
         val fromId = FirebaseAuth.getInstance().uid
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         val toId = user.uid
 
+        val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push() //push creates a new child in ref
+
+        val toref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push() //push creates a new child in ref for the other user
         if(fromId == null) return
         val chatMessage = ChatMessage(ref.key!!,text, fromId, toId, System.currentTimeMillis()/1000)
-        ref.setValue(chatMessage)
+
+        ref.setValue(chatMessage) //add node to the given reference
+            .addOnSuccessListener {
+                message_edittext_chatlog.text.clear()
+                recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)//automatically scroll to end of chat
+            }
+        toref.setValue(chatMessage)
 
     }
 
-//    private fun dummyData(){
-//        val adapter = GroupAdapter<ViewHolder>()
-//        adapter.add(ChatRecievedItem("from"))
-//        adapter.add(ChatSentItem("to"))
-//        adapter.add(ChatRecievedItem("from"))
-//        adapter.add(ChatRecievedItem("to"))
-//        adapter.add(ChatSentItem("from"))
-//        recyclerview_chatlog.adapter = adapter
-//    }
 }
-class ChatRecievedItem(val text: String) : Item<ViewHolder>(){
+class ChatRecievedItem(val text: String, val user: User) : Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.message_textview_recieved.text = text
+
+        val uri = user.displayPictureUrl
+        val targetImageView = viewHolder.itemView.message_imageview_recieved
+        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
@@ -101,9 +114,12 @@ class ChatRecievedItem(val text: String) : Item<ViewHolder>(){
 }
 
 
-class ChatSentItem(val text: String): Item<ViewHolder>(){
+class ChatSentItem(val text: String, val user: User): Item<ViewHolder>(){
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.message_textview_sent.text = text
+        val uri = user.displayPictureUrl
+        val targetImageView = viewHolder.itemView.message_imageview_sent
+        Picasso.get().load(uri).into(targetImageView)
     }
 
     override fun getLayout(): Int {
