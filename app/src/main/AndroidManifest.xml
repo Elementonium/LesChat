@@ -9,27 +9,36 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-
-        <activity android:name=".Conversations">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".RegisterActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".NewMessageActivity"
-                    android:label="@string/select_user">
+        <activity android:name=".messages.ChatLogActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
-                       android:value=".Conversations"/>
+                       android:value=".messages.Conversations"
+                       />
+        </activity>
+        <activity android:name=".messages.Conversations">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".registerlogin.RegisterActivity">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER"/> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity android:name=".registerlogin.LoginActivity">
+        </activity>
+        <activity
+                android:name=".messages.NewMessageActivity"
+                android:label="@string/select_user">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".messages.Conversations"/>
         </activity>
     </application>
 

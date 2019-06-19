@@ -1,4 +1,4 @@
-package com.les.chat
+package com.les.chat.messages
 
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
+import com.les.chat.R
+import com.les.chat.registerlogin.RegisterActivity
 
 class Conversations : AppCompatActivity() {
 
@@ -32,12 +34,12 @@ class Conversations : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         //basically switch case statement
         when(item?.itemId){
-            R.id.menu_new_message->{
+            R.id.menu_new_message ->{
                 val intent = Intent(this, NewMessageActivity::class.java)
                 startActivity(intent)
 
             }
-            R.id.menu_signOut->{
+            R.id.menu_signOut ->{
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this, RegisterActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)

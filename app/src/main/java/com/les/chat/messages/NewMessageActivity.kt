@@ -1,12 +1,14 @@
-package com.les.chat
+package com.les.chat.messages
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.les.chat.R
+import com.les.chat.models.User
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
@@ -23,6 +25,9 @@ class NewMessageActivity : AppCompatActivity() {
 
         fetchUsers()
     }
+    companion object{
+        val USER_KEY = "USER_KEY"
+    }
 
     private fun fetchUsers(){
         val ref = FirebaseDatabase.getInstance().getReference("/users")
@@ -36,6 +41,14 @@ class NewMessageActivity : AppCompatActivity() {
                     val user = it.getValue(User::class.java)
                     if (user != null) {
                         adapter.add(UserItem(user))
+                    }
+                    adapter.setOnItemClickListener { item, view ->
+                        val userItem = item as UserItem
+                        val intent = Intent(view.context, ChatLogActivity::class.java)
+                        intent.putExtra(USER_KEY,userItem.user)
+                        startActivity(intent)
+
+                        //finish()
                     }
                     recycleview_new_message.adapter = adapter
                 }
