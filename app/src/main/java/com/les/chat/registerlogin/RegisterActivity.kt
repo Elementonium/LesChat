@@ -1,8 +1,7 @@
-package com.les.chat
+package com.les.chat.registerlogin
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +10,9 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.les.chat.R
+import com.les.chat.messages.Conversations
+import com.les.chat.models.User
 import kotlinx.android.synthetic.main.activity_register.*
 import java.util.*
 
@@ -25,7 +27,7 @@ class RegisterActivity : AppCompatActivity() {
 
         }
         already_have_account_text_view.setOnClickListener{
-            val intent = Intent(this,LoginActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
         selectphoto_button_register.setOnClickListener {
@@ -96,10 +98,14 @@ class RegisterActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: "" //if uid is null default to empty string
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
+
         val user = User(uid, username_edittext_register.text.toString(), displayPictureUrl)
         ref.setValue(user)
             .addOnSuccessListener {
                 Toast.makeText(this , "Created user" , Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Conversations::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
             .addOnFailureListener {
                 Toast.makeText(this , "Failed to create user: ${it.message.toString()}" , Toast.LENGTH_SHORT).show()
@@ -107,4 +113,3 @@ class RegisterActivity : AppCompatActivity() {
     }
 
 }
-class User(val uid: String, val username: String, val displayPictureUrl: String)
