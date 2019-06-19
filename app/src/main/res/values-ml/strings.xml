@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LesChat</string>
+    <string name="create_a_new_account">പുതിയ അക്കൗണ്ട്‌ സൃഷ്‌ടിക്കുക</string>
+    <string name="email">"ഇമെയിൽ "</string>
+    <string name="login">അകത്തു പ്രവേശിക്കുക</string>
+    <string name="password">പാസ്സ്‌വേർഡ്</string>
+    <string name="register">അക്കൗണ്ട്‌ സൃഷ്‌ടിക്കുക</string>
+    <string name="select_photo">ചിത്രം തിരഞ്ഞെടുക്കുക</string>
+    <string name="username">ഉപയോക്തൃനാമം</string>
+    <string name="already_have_an_account">അക്കൗണ്ട് നേരത്തെ നിർമിച്ചിരുന്നോ ?</string>
+    <string name="select_user">ഉപയോക്താവിനെ തിരഞ്ഞെടുക്കുക</string>
+    <string name="new_message">പുതിയ സന്ദേശം</string>
+    <string name="sign_out">"പുറത്തു കടക്കുക "</string>
+</resources>
