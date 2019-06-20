@@ -9,14 +9,18 @@
 
     <EditText
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:maxHeight="150dp"
+            android:maxWidth="250dp"
+            android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:gravity="start|top"
             android:ems="10"
             android:id="@+id/message_edittext_chatlog" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="8dp"
             app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/send_button_chatlog" android:hint="Enter Message..."/>
+            app:layout_constraintEnd_toStartOf="@+id/send_button_chatlog" android:hint="Enter message"
+            android:linksClickable="true" android:textSize="18dp"
+            android:nestedScrollingEnabled="false"/>
     <Button
             android:text="SEND"
             android:layout_width="wrap_content"

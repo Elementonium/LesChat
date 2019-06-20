@@ -1,24 +1,33 @@
 package com.les.chat.messages
 
+import android.content.ClipData
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.view.Menu
 import android.view.MenuItem
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.les.chat.R
+import com.les.chat.models.ChatMessage
 import com.les.chat.models.User
 import com.les.chat.registerlogin.RegisterActivity
+import com.les.chat.views.LatestMessageRow
+import com.squareup.picasso.Picasso
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.Item
+import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.activity_conversations.*
+import kotlinx.android.synthetic.main.conversations_row.view.*
 
 class Conversations : AppCompatActivity() {
     //basically global variable
     companion object{
         var currentUser : User? = null
     }
+    val adapter = GroupAdapter<ViewHolder>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +35,22 @@ class Conversations : AppCompatActivity() {
 
         verifyUserIsLoggedIn()
         fetchCurrentUserInfo()
+        listenForLatestMessages()
+
+
+        recyclerview_conversations.adapter = adapter
+        //Horizontal Line after Each Row
+        if(adapter.itemCount>0) {
+            recyclerview_chatlog.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        }
+        //set item click for the recycler view
+
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(this, ChatLogActivity::class.java)
+            val row = item as LatestMessageRow
+            intent.putExtra(NewMessageActivity.USER_KEY, row.chatPartnerUser)
+            startActivity(intent)
+        }
     }
     private fun verifyUserIsLoggedIn(){
         val uid = FirebaseAuth.getInstance().uid
@@ -48,6 +73,46 @@ class Conversations : AppCompatActivity() {
         })
     }
 
+    private fun refreshCOnversationsRecyclerView(){
+        adapter.clear()
+        LatestMessageMap.values.forEach {
+            adapter.add(LatestMessageRow(it))
+        }
+    }
+    val LatestMessageMap = HashMap<String, ChatMessage>()
+    private fun listenForLatestMessages(){
+        val fromId = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
+
+        ref.addChildEventListener(object : ChildEventListener{
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+
+                LatestMessageMap[p0.key!!] = chatMessage
+                refreshCOnversationsRecyclerView()
+
+            }
+
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                val chatMessage = p0.getValue(ChatMessage::class.java) ?: return
+
+                LatestMessageMap[p0.key!!] = chatMessage
+                refreshCOnversationsRecyclerView()
+            }
+
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+
+            }
+
+            override fun onChildRemoved(p0: DataSnapshot) {
+
+            }
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+        })
+
+    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
