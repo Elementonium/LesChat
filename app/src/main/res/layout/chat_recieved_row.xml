@@ -12,6 +12,7 @@
             android:background="@drawable/rounded_edittext_login_register"
             android:maxWidth="240dp"
             android:layout_marginTop="8dp"
+            android:textColor="@android:color/white"
             app:layout_constraintTop_toTopOf="@+id/message_imageview_recieved" app:layout_constraintStart_toEndOf="@+id/message_imageview_recieved"
             android:layout_marginStart="8dp"
             android:paddingLeft="6dp"
@@ -22,6 +23,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp" tools:srcCompat="@tools:sample/avatars[11]"
             tools:layout_editor_absoluteY="5dp" android:id="@+id/message_imageview_recieved"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-    app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"/>
 </android.support.constraint.ConstraintLayout>

@@ -82,6 +82,7 @@ class ChatLogActivity : AppCompatActivity() {
         //Set the properties of ChatMessage
         val text = message_edittext_chatlog.text.toString()
         val fromId = FirebaseAuth.getInstance().uid
+        if(fromId == null || text == "") return
         val user = intent.getParcelableExtra<User>(NewMessageActivity.USER_KEY)
         val toId = user.uid
 
@@ -93,7 +94,6 @@ class ChatLogActivity : AppCompatActivity() {
 
         val latestMessageTOref = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
 
-        if(fromId == null) return
         val chatMessage = ChatMessage(ref.key!!,text, fromId, toId, System.currentTimeMillis()/1000)
 
         ref.setValue(chatMessage) //add node to the given reference
