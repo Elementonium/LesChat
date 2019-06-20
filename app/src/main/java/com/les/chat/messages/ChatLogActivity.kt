@@ -2,6 +2,7 @@ package com.les.chat.messages
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -28,12 +29,13 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        recyclerview_chatlog.adapter=adapter
 
         //set the chat partner to the user recieved from NewMessageActivity
         partnerUser = intent.getParcelableExtra(NewMessageActivity.USER_KEY)
 
         supportActionBar?.title = partnerUser?.username
+
+        recyclerview_chatlog.adapter=adapter
 
         listenForMessages()
 
@@ -55,8 +57,8 @@ class ChatLogActivity : AppCompatActivity() {
                         adapter.add(ChatSentItem(chatMessage.text, currentUser)) //add sentitem to the chatlog
                     } else {
                         adapter.add(ChatRecievedItem(chatMessage.text, partnerUser!!)) //add recieveditem to the chatlog
-                        recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)
                     }
+                    recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)
                 }
             }
 
@@ -86,6 +88,11 @@ class ChatLogActivity : AppCompatActivity() {
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId").push() //push creates a new child in ref
 
         val toref = FirebaseDatabase.getInstance().getReference("/user-messages/$toId/$fromId").push() //push creates a new child in ref for the other user
+
+        val latestMessageref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId/$toId")
+
+        val latestMessageTOref = FirebaseDatabase.getInstance().getReference("/latest-messages/$toId/$fromId")
+
         if(fromId == null) return
         val chatMessage = ChatMessage(ref.key!!,text, fromId, toId, System.currentTimeMillis()/1000)
 
@@ -95,6 +102,8 @@ class ChatLogActivity : AppCompatActivity() {
                 recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)//automatically scroll to end of chat
             }
         toref.setValue(chatMessage)
+        latestMessageref.setValue(chatMessage)
+        latestMessageTOref.setValue(chatMessage)
 
     }
 

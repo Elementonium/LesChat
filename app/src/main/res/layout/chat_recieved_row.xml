@@ -5,7 +5,7 @@
                                              android:layout_marginBottom="12dp">
 
     <TextView
-            android:text="The message function is still under works so you will have to wait untill you can say hai to this person"
+            tools:text="This is a message sent by chat partner to current user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/message_textview_recieved"
@@ -22,5 +22,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp" tools:srcCompat="@tools:sample/avatars[11]"
             tools:layout_editor_absoluteY="5dp" android:id="@+id/message_imageview_recieved"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"/>
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+    app:layout_constraintEnd_toEndOf="parent"/>
 </android.support.constraint.ConstraintLayout>

@@ -5,7 +5,7 @@
                                                 android:layout_marginBottom="12dp">
 
     <TextView
-            android:text="You cant actually type messages and send in this early alpha version of leschat but the first completed beta version will be released on 20th of June"
+            tools:text="This is a reply to the chat partner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/message_textview_sent"

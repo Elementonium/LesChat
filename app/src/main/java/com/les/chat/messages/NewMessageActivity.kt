@@ -48,7 +48,7 @@ class NewMessageActivity : AppCompatActivity() {
                         intent.putExtra(USER_KEY,userItem.user)
                         startActivity(intent)
 
-                        //finish()
+                        finish()
                     }
                     recycleview_new_message.adapter = adapter
                 }

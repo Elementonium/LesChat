@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="120dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp" tools:srcCompat="@tools:sample/avatars[9]"
+            android:id="@+id/dp_imageview_conversations"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp" app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+            tools:text="Username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/username_textview_conversations"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/dp_imageview_conversations" android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/lastmessage_textview_conversations"
+            android:layout_marginTop="24dp" android:textColor="@color/common_google_signin_btn_text_dark_focused"/>
+    <TextView
+            tools:text="Last Message Here"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/lastmessage_textview_conversations"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="176dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="36dp" app:layout_constraintStart_toEndOf="@+id/dp_imageview_conversations"
+            android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/username_textview_conversations"
+            app:layout_constraintHorizontal_bias="0.5"/>
+</android.support.constraint.ConstraintLayout>
