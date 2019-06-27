@@ -10,7 +10,6 @@
     <EditText
             android:layout_width="0dp"
             android:maxHeight="150dp"
-            android:maxWidth="250dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:gravity="start|top"

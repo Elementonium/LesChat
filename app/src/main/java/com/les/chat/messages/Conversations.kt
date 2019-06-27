@@ -39,10 +39,6 @@ class Conversations : AppCompatActivity() {
 
 
         recyclerview_conversations.adapter = adapter
-        //Horizontal Line after Each Row
-        if(adapter.itemCount>0) {
-            recyclerview_chatlog.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        }
         //set item click for the recycler view
 
         adapter.setOnItemClickListener { item, view ->
