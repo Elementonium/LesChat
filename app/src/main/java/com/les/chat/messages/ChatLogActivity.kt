@@ -78,7 +78,7 @@ class ChatLogActivity : AppCompatActivity() {
         val fromId = FirebaseAuth.getInstance().uid
         val toId = partnerUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
-        //when a new child is added to given node
+        //Executed when a new child is created
         ref.addChildEventListener(object : ChildEventListener{
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                 val chatMessage = p0.getValue(ChatMessage::class.java) //store the chat message as a ChatMessage
@@ -97,10 +97,10 @@ class ChatLogActivity : AppCompatActivity() {
                 val chatMessage = p0.getValue(ChatMessage::class.java) //store the chat message as a ChatMessage
                 if (chatMessage != null) {
                     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-                        val currentUser = Conversations.currentUser ?: return //get current usr from global var in ConversationsActivity
-                        adapter.add(ChatSentItem(chatMessage.text, currentUser)) //add sentitem to the chatlog
+                        val currentUser = Conversations.currentUser ?: return //Retrieve current user from global variable in ConversationsActivity
+                        adapter.add(ChatSentItem(chatMessage.text, currentUser)) //add sentitem to the chatlog adapter
                     } else {
-                        adapter.add(ChatRecievedItem(chatMessage.text, partnerUser!!)) //add recieveditem to the chatlog
+                        adapter.add(ChatRecievedItem(chatMessage.text, partnerUser!!)) //add recieveditem to the chatlog adapter
                     }
                     recyclerview_chatlog.scrollToPosition(adapter.itemCount -1)
                 }
@@ -177,7 +177,7 @@ class ChatLogActivity : AppCompatActivity() {
         latestMessageTOref.setValue(chatMessage)
 
     }
-
+    //Inflate contents of chat_menu to OptionsMenu
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.chat_menu, menu)
         return super.onCreateOptionsMenu(menu)
